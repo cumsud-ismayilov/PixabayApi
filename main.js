@@ -2,6 +2,8 @@ const searchInput = document.querySelector("#searchInput");
 const cardElem = document.querySelector("#card");
 const BaseUrl = "https://pixabay.com/api"; // DOĞRU URL
 const ApiKey = "key=24090419-925e057925ba4cc124682bb5f";
+const notResult = document.querySelector("#notResult");
+const loader = document.querySelector("#loader");
 searchInput.focus();
 domRender("baku");
 
@@ -20,13 +22,22 @@ function sliceTag(tags) {
   return result;
 }
 
+function delay(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 async function domRender(param) {
+  cardElem.innerHTML = "";
+  notResult.classList.add("hidden");
+  loader.classList.remove("hidden");
   try {
+    await delay(1500);
     const response = await fetch(`${BaseUrl}/?${ApiKey}&q=${param}`);
     const data = await response.json();
-    cardElem.innerHTML = "";
-    data.hits.forEach((info) => {
-      cardElem.innerHTML += `
+
+    if (data.hits.length) {
+      data.hits.forEach((info) => {
+        cardElem.innerHTML += `
         <div class="shadow-lg rounded-md border border-[violet]">
           <img src="${
             info.webformatURL
@@ -47,8 +58,13 @@ async function domRender(param) {
           </div>
         </div>
       `;
-    });
+      });
+    } else {
+      notResult.classList.remove("hidden");
+    }
   } catch (err) {
     console.error("Fetch error:", err);
+  } finally {
+    loader.classList.add("hidden");
   }
 }
