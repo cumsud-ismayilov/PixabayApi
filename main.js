@@ -14,13 +14,7 @@ searchInput.addEventListener("keyup", (e) => {
   }
 });
 
-function sliceTag(tags) {
-  let result = "";
-  tags.split(", ").forEach((tag) => {
-    result += `<span class="text-blue-500">#${tag}</span>`;
-  });
-  return result;
-}
+
 
 function delay(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -43,9 +37,6 @@ async function domRender(param) {
             info.webformatURL
           }" alt="" class="w-full object-cover h-[300px]">
           <div class="p-[20px]">
-            <p class="mb-[10px] flex flex-wrap gap-[4px]">${sliceTag(
-              info.tags
-            )}</p>
             <button>
               <a href="${info.previewURL}" target="_blank">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
