@@ -14,18 +14,16 @@ searchInput.addEventListener("keyup", (e) => {
   }
 });
 
-
-
 function delay(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 async function domRender(param) {
   cardElem.innerHTML = "";
+  cardElem.classList.add("hidden");
   notResult.classList.add("hidden");
   loader.classList.remove("hidden");
   try {
-    await delay(1500);
     const response = await fetch(`${BaseUrl}/?${ApiKey}&q=${param}`);
     const data = await response.json();
 
@@ -33,9 +31,7 @@ async function domRender(param) {
       data.hits.forEach((info) => {
         cardElem.innerHTML += `
         <div class="shadow-lg rounded-md border border-[violet]">
-          <img src="${
-            info.webformatURL
-          }" alt="" class="w-full object-cover h-[300px]">
+          <img src="${info.webformatURL}" alt="" class="w-full object-cover h-[300px]">
           <div class="p-[20px]">
             <button>
               <a href="${info.previewURL}" target="_blank">
@@ -56,6 +52,8 @@ async function domRender(param) {
   } catch (err) {
     console.error("Fetch error:", err);
   } finally {
+    delay(1500);
+    cardElem.classList.remove("hidden");
     loader.classList.add("hidden");
   }
 }
